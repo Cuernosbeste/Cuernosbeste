@@ -2,6 +2,9 @@
 
 # Declare characters used by this game. The color argument colorizes the
 # name of the character.
+
+
+
 image main_menu = im.Scale('main_menu.png', 1920, 1080)
 
 image big alleyway = im.Scale('alleyway.png', 1920, 1080)
@@ -9,29 +12,15 @@ image bg gas station = im.Scale('bg gas station.png', 1920, 1080)
 image bg foodcourt = im.Scale('bg foodcourt.png', 1920, 1080)
 image snackasilebgn = im.Scale('snackasilebg.png', 1920, 1080)
 image bg arcade = im.Scale('bg arcade.png', 1920, 1080)
+image bg junkyard = im.Scale('junkyard.png', 1920, 1080)
 
-transform natural_size:
-        on show:
-             yalign 610 xalign 0.5
-transform half_size:
-        size (400,1114) crop(0,0,806,2244)
-        on show:
-            yalign 610 xalign 0.5
+
 
 define Pal = Character('Pal', color="#FF9994")
 define audio.ThreadHearts = "audio/music/bgm_ThreadHearts.mp3"
 image splash = "pressstart.jpg"
 # The game starts here.
-label splashscreen:
-    scene black with dissolve
-    pause (1)
-    show pressstart with dissolve
-    play audio "audio/music/coin.mp3" volume 0.5
-    pause
-    hide pressstart with dissolve
-    pause (1)
 
-    return
 label start:
 play music "audio/music/hearts.mp3"
 scene big alleyway
@@ -39,8 +28,10 @@ scene big alleyway
 scene big alleyway
 with fade
 "You try to reach the end of the alleyway, but hear a noise coming from behind you."
-show unknownperson hello
-
+show unknownperson hello at center:
+        xoffset -100
+        yoffset 100
+with dissolve
 "Unknown Member" "Hey there are you alright?"
 "Newbie" "H-.. Huh?"
 "Unknown Member" "You’re the newbie, right?"
@@ -57,8 +48,10 @@ if player_name == "":
 hide unknownperson hello
 with fade
 
-show unknownperson nervous
-
+show unknownperson nervous at center:
+        xoffset -100
+        yoffset 100
+with dissolve
 "Unknown Member" "Oh, don’t worry, this is just a way you can get a little used to the area and meet the others in the crew! I just need you to pick a few things. Alright?"
 "Newbie" "Well-.."
 "Unknown Member" "Good, hey, theres a few places we usually  hang out and get what we need. You've got the list today."
@@ -69,29 +62,26 @@ show unknownperson nervous
 hide unknownperson nervous
 with fade
 
-menu:
-    "Where should you go first?"
-    "The Corner Store":
-        "You walk across the street and stand near the entrance of the small corner store."
-        "It seems like you’ve passed through this place a few times already. This place feels a little different each time you come here and just like every corner store there's a few snacks you can choose from."
+menu locations:
+    "The next place is the store on the list. Where would you like to go first?"
+    "The outside the Corner Store":
         jump corner
-    "The Food Court":
-        "You find yourself in the food court. You are unfamiliar with its monarch, but his choice in food suggests he likes it greasy and fast."
-        jump court
-    "The Arcade":
-        "You stand outside the arcade. It sits in a strange ‘90s bubble outside of time, forever maintained by its proprietor, Krimbo."
-        "If you weren’t already familiar with the finger puppet master himself, you’d think he is suffering from a mid-boss life crisis."
-        jump arcade
-    "The Junkyard":
-        "You arrive at the junkyard. It sits in a strange meta-state between an actual junkyard serving its intended purpose and an art installation organized adjacent to an arcade."
-        jump junk
+    "The inside of the Corner Store":
+        jump inside
 stop music fadeout 1.0
 return
+
 label corner:
     scene bg gas station
     with fade
-"You try to talk to the Ram outside of the store."
-show ram hello
+"You walk across the street and stand near the entrance of the small corner store."
+"It seems like you’ve passed through this place a few times already. This place feels a little different each time you come here and just like every corner store there's a few snacks you can choose from."
+
+"You try to talk to the person outside of the store."
+show ram hello at center:
+        xoffset -100
+        yoffset 300
+with dissolve
 
 with fade
 "Ram" " Oi, you seem to be looking for something?"
@@ -99,56 +89,148 @@ with fade
 "Ram" "Ohhh.. if you go inside you'll get what you need but you might find more if you go around the neighborhood."
 hide ram hello
 
-show ram smile
+show ram smile at center:
+        xoffset -100
+        yoffset 300
+with dissolve
 "Ram" "I know the bosses will be happy for you doing this."
 hide ram smile
 
-show ram hello
+show ram hello at center:
+        xoffset -100
+        yoffset 300
+with dissolve
 "Ram" "Oh wait before you go, here's a bit of advice! Ask all the people who are a part of the gang what they think about Rummy, Coqui and Krimbo."
+
 hide ram hello
 
 menu:
-    "Where would you like to go next?"
-    "The Inside of the Corner Store":
-        "You enter the inside of the corner store and see a familiar sight of the various snacks you've probably eaten before a million times before."
+    "Would you like to go inside of the store or try other locations?"
+    "The inside of the Corner Store":
         jump inside
-    "The Food Court":
-        "You find yourself in the food court. You are unfamiliar with its monarch, but his choice in food suggests he likes it greasy and fast."
-        jump court
     "The Arcade":
-        "You stand outside the arcade. It sits in a strange ‘90s bubble outside of time, forever maintained by its proprietor, Krimbo."
-        "If you weren’t already familiar with the finger puppet master himself, you’d think he is suffering from a mid-boss life crisis."
         jump arcade
+    "The Food Court":
+        jump court
     "The Junkyard":
-        "You arrive at the junkyard. It sits in a strange meta-state between an actual junkyard serving its intended purpose and an art installation organized adjacent to an arcade."
         jump junk
 return
 label inside:
     scene snackasilebg
     with fade
+
+"You spot a strange man who seems out of place in the side standing beside the aisles."
+show rowdy hello at center:
+        xoffset -100
+        yoffset 400
+with dissolve
+"Rowdy" "Hey there kid!!! Are you looking for something?"
+"The man seems a bit suspicious especially from his attire."
+
+hide rowdy hello
+
+show rowdy smile at center:
+        xoffset -100
+        yoffset 400
+with dissolve
+hide rowdy smile
+$ story = 0
+
+"Where would you like to go next?"
+menu:
+    "Where to next?"
+    "The Arcade":
+            jump arcade
+    "The Food Court":
+            jump court
+    "The Junkyard":
+            jump junk
+return
+
+
+
+label arcade:
+    scene bg arcade
+    with fade
+"You stand outside the arcade. It sits in a strange ‘90s bubble outside of time, forever maintained by its proprietor, Krimbo."
+"If you weren’t already familiar with the finger puppet master himself, you’d think he is suffering from a mid-boss life crisis."
+show reda hello at center:
+        xoffset -100
+        yoffset 400
+with dissolve
+"Reda" "Hey, have you heard of the new Zombi vs Ghoul movie?"
+"Reda" "Although it's probably not as great as Zombi origins."
+"Reda" "Sorry about that my name is Reda"
+"Newbie" "uh.. Excuse me-"
+"Reda" "Oh. Is there anything you need?"
+"Newbie" "Yeah I need something off this list."
+hide reda hello
+show reda smile at center:
+        xoffset -100
+        yoffset 400
+with dissolve
+"Reda looks at the list"
+"Reda" "OH YEAH. You’re the new one in the gang."
+"Newbie" "So can I have it?"
+hide reda smile
+show reda hello at center:
+        xoffset -100
+        yoffset 400
+with dissolve
+"Reda" "hmm.. Can you have it?"
+"Newbie" "uh-"
+hide reda hello
+show reda smile at left:
+        xoffset -100
+        yoffset 400
+with dissolve
+"Reda" "WELL NOT UNTIL YOU ANSWER MY QUESTION FIRST."
+show assets cd at right:
+        xoffset -100
+
+show assets tape at right:
+        xoffset 100
+
+
+
+"Reda" "Have you ever heard of the tragedy of Daniel Pissman? I thought not. It’s not a story they would tell you."
+"Reda" "It’s a TRUE zombie slayer legend."
+"Reda" "Daniel Pissman was one of the original Zombie annihilators, so powerful and so righteous he could use his sword to influence the scavengers to create a new life…"
+"Reda" "He had such a knowledge of the dark side that he could even keep the ones he cared about from dying."
+"Reda" "The dark side of the Zombie Slayers is a pathway to many abilities some consider to be unnatural."
+"Reda" "He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic."
+"Reda" "He could save others from death, but not himself."
+
+
+return
+menu:
+    "Only two places next. Where would you like to go?"
+    "The Food Court":
+            jump court
+    "The Junkyard":
+            jump junk
 return
 
 label court:
     scene bg foodcourt
     with fade
+"You find yourself in the food court. You are unfamiliar with its monarch, but his choice in food suggests he likes it greasy and fast."
 menu:
-    "The Arcade":
-        "You stand outside the arcade. It sits in a strange ‘90s bubble outside of time, forever maintained by its proprietor, Krimbo."
-        "If you weren’t already familiar with the finger puppet master himself, you’d think he is suffering from a mid-boss life crisis."
-        jump arcade
+    "There's one location left, but you can skip it. Where to next?"
     "The Junkyard":
-        "You arrive at the junkyard. It sits in a strange meta-state between an actual junkyard serving its intended purpose and an art installation organized adjacent to an arcade."
-        jump junk
-label arcade:
-    scene bg arcade
-    with fade
+            jump junk
+    "The Parking Lot":
+            jump ending1
 return
-menu:
-    "The Junkyard":
-        "You arrive at the junkyard. It sits in a strange meta-state between an actual junkyard serving its intended purpose and an art installation organized adjacent to an arcade."
-        jump junk
-return
+
 label junk:
-    scene arcade
+    scene junkyard
     with fade
+"You arrive at the junkyard. It sits in a strange meta-state between an actual junkyard serving its intended purpose and an art installation organized adjacent to an arcade."
+"You've gathered all the items it seems like so you decide to head back to the Parking lot to join with the Mysterious Member again."
+jump ending1
+
+return
+
+label ending1:
 return
